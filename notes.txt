@@ -42,3 +42,10 @@ PUT http://myapp.com/products/1
 DELETE http://myapp.com/products/1  
 
 Routing
+
+www-url-form-encoded
+key=value&key=value&key=value
+
+Middleware
+    Any common logic that need to be applied for EVERY request & response 
+    (e.g. logging, authentication, authorization, etc)
