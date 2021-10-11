@@ -1,0 +1,17 @@
+
+Use : https://github.com/gorilla/mux
+
+1. Expose REST endpoints 
+    GET http://localhost:8080/api/lists
+    GET http://localhost:8080/api/lists/{id}
+    POST http://localhost:8080/api/lists
+    DELETE http://localhost:8080/api/lists/{id}
+
+    GET http://localhost:8080/api/lists/{id}/items
+    POST http://localhost:8080/api/lists/{id}/items
+
+    GET http://localhost:8080/api/lists/{id}/items/{itemid}
+    PUT http://localhost:8080/api/lists/{id}/items/{itemid}
+    DELETE http://localhost:8080/api/lists/{id}/items/{itemid}
+
+2. Organize the application code
