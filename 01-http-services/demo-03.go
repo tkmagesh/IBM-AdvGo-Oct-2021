@@ -26,6 +26,18 @@ func logging(f http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+func Method(m string) Middleware {
+	return func(f http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			if r.Method != m {
+				http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+				return
+			}
+			f(w, r)
+		}
+	}
+}
+
 func Chain(f http.HandlerFunc, middlewares ...Middleware) http.HandlerFunc {
 	for _, m := range middlewares {
 		f = m(f)
@@ -38,7 +50,7 @@ func main() {
 		http.HandleFunc("/foo", profileTime(logging(foo)))
 		http.HandleFunc("/bar", profileTime(logging(bar)))
 	*/
-	http.HandleFunc("/foo", Chain(foo, logging, profileTime))
+	http.HandleFunc("/foo", Chain(foo, logging, profileTime, Method("POST")))
 	http.HandleFunc("/bar", Chain(bar, logging, profileTime))
 	http.ListenAndServe(":8080", nil)
 }
