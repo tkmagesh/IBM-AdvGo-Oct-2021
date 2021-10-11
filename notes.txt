@@ -1,0 +1,44 @@
+Schedule:
+    Commence    : 9:30 AM
+    Tea Break   : 11:00 AM (20 mins)
+    Lunch Break : 01:00 PM (1 Hr)
+    Tea Break   : 3:30 PM (20 mins)
+    Wind up     : 5:30 PM
+
+Methodoly:
+    No powerpoints
+    Handson Driven
+
+About You:
+    1. Name
+    2. Total Experience
+    3. Primary Skillset
+    4. Experience in Golang
+    5. Any specific expectations
+
+Design Patterns
+    Facade
+    Composite
+    Builder
+    Strategy
+    Factory
+    Adpater
+
+Concurrency Pattern
+    Circuit Breaker
+
+Concurrency Refresher
+
+Http Services
+    1. Platform APIs
+    2. Library 
+    3. Frameworks
+
+
+GET http://myapp.com/products
+GET http://myapp.com/products/1
+POST http://myapp.com/products/
+PUT http://myapp.com/products/1
+DELETE http://myapp.com/products/1  
+
+Routing
