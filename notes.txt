@@ -87,3 +87,14 @@ GRPC
         Input?
         Output?
         Communication Pattern?
+
+    To generate the proxy & stub
+        protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/service.proto 
+
+    service.pb.go
+        contains information to serialize and deserialize the message (payload)
+
+To install the dependencies for grpc
+    go get -u google.golang.org/grpc
+    go get -u google.golang.org/protobuf/reflect/protoreflect
+    go get -u google.golang.org/protobuf/runtime/protoimpl
