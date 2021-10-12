@@ -34,6 +34,7 @@ func (p *Pool) Acquire() (io.Closer, error) {
 		if !ok {
 			return nil, ErrPoolClosed
 		}
+		log.Println("AcAcquire: From pool")
 		return resource, nil
 	default:
 		log.Println("Acquire: New Resource")
@@ -48,6 +49,7 @@ func (p *Pool) Release(resource io.Closer) {
 		resource.Close()
 		return
 	}
+
 	select {
 	case p.resources <- resource:
 		log.Println("Release: ", "Resource in queue")
