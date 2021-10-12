@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"sync"
 	"time"
 	"worker-demo/work"
 )
@@ -29,19 +28,19 @@ func (np *namePrinter) Task() {
 
 func main() {
 	p := work.New(8)
-	var wg = sync.WaitGroup{}
-	wg.Add(10 * len(names))
+	//var wg = sync.WaitGroup{}
+	//wg.Add(10 * len(names))
 	for i := 0; i < 10; i++ {
 		for _, name := range names {
 			np := namePrinter{
 				name: name,
 			}
-			go func() {
-				p.Run(&np)
-				wg.Done()
-			}()
+
+			p.Run(&np)
+			//wg.Done()
+
 		}
 	}
-	wg.Wait()
+	//wg.Wait()
 	p.Shutdown()
 }

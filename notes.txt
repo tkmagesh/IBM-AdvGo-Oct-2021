@@ -49,3 +49,41 @@ key=value&key=value&key=value
 Middleware
     Any common logic that need to be applied for EVERY request & response 
     (e.g. logging, authentication, authorization, etc)
+
+GRPC
+    gRPC
+        interservice communication
+        http2
+        binary
+        protocol buffers
+        Communication Patterns
+            Request & Response
+            Client Streaming (multiple requests & single response)
+            Server Streaming (single request & multiple responses)
+            Bidirectional Streaming (multiple requests & multiple responses)
+        Support for multiple languages
+
+    REST
+        (+) http (stateless) 
+            text
+            JSON
+            Request & Response 
+            (e.g. GET, POST, PUT, DELETE)
+
+    Tools installation
+
+        Mac
+            brew install protobuf
+            brew install protoc-gen-go
+            brew install protoc-gen-go-grpc
+
+        windows:
+            go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
+            go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
+
+
+    Schema
+        Operation?
+        Input?
+        Output?
+        Communication Pattern?
