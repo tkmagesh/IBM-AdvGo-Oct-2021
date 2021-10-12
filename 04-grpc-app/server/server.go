@@ -24,6 +24,8 @@ func (s *server) Add(ctx context.Context, req *proto.AddRequest) (*proto.AddResp
 }
 
 func main() {
+
+	//Hosting the service
 	listener, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalln(err)
