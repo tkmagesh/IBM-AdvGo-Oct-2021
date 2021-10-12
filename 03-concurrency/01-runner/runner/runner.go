@@ -2,6 +2,7 @@ package runner
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"os/signal"
 	"time"
@@ -57,6 +58,7 @@ func (r *Runner) run() error {
 func (r *Runner) gotInterrupt() bool {
 	select {
 	case <-r.interrupt:
+		fmt.Println("interrupted and exiting")
 		signal.Stop(r.interrupt)
 		return true
 	default:

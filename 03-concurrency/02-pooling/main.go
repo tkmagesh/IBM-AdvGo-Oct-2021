@@ -1,12 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"math/rand"
+	"os"
+	"os/signal"
 	"pooling-demo/pool"
 	"sync"
 	"sync/atomic"
+	"syscall"
 	"time"
 )
 
@@ -32,7 +36,11 @@ func createConnection() (io.Closer, error) {
 	return &dbConnection{id}, nil
 }
 
+var interrupt chan os.Signal = make(chan os.Signal)
+
 func main() {
+	signal.Notify(interrupt, syscall.SIGINT, syscall.SIGTERM)
+
 	wg := &sync.WaitGroup{}
 	wg.Add(maxGoroutines)
 
@@ -40,6 +48,17 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
+	go func() {
+		for {
+			select {
+			case sig := <-interrupt:
+				fmt.Println("Interrupt:", sig)
+				pool.Close()
+				os.Exit(1)
+			}
+		}
+	}()
 
 	for idx := 0; idx < maxGoroutines; idx++ {
 		go func(id int) {
@@ -58,6 +77,8 @@ func main() {
 		}(idx)
 	}
 	wg.Wait()
+	fmt.Println("Waiting to be killed, pid = ", os.Getpid())
+	time.Sleep(5 * time.Minute)
 }
 
 func useResource(id int, pool *pool.Pool) {
