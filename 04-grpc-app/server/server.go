@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"grpc-app/proto"
 	"io"
 	"log"
@@ -78,6 +79,25 @@ func isPrime(no int32) bool {
 		}
 	}
 	return true
+}
+
+func (s *server) GreetEveryone(stream proto.AppService_GreetEveryoneServer) error {
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+		firstName := req.GetUser().GetFirstName()
+		lastName := req.GetUser().GetLastName()
+		message := fmt.Sprintf("Hi %s %s!", firstName, lastName)
+		response := &proto.GreetResponse{
+			Message: message,
+		}
+		stream.Send(response)
+	}
 }
 
 func main() {
