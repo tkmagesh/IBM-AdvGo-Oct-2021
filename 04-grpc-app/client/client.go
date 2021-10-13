@@ -21,7 +21,8 @@ func main() {
 
 	//doRequestResponse(ctx, client)
 	//doClientStreaming(ctx, client)
-	doServerStreaming(ctx, client)
+	//doServerStreaming(ctx, client)
+	doBidiStreaming(ctx, client)
 }
 
 func doRequestResponse(ctx context.Context, client proto.AppServiceClient) {
@@ -112,5 +113,39 @@ func doServerStreaming(ctx context.Context, client proto.AppServiceClient) {
 			log.Fatalln(err)
 		}
 		log.Println("Prime : ", res.GetNo())
+	}
+}
+
+func doBidiStreaming(ctx context.Context, client proto.AppServiceClient) {
+	users := []proto.User{
+		{FirstName: "Magesh", LastName: "Kuppan"},
+		{FirstName: "Suresh", LastName: "Rajan"},
+		{FirstName: "Rajesh", LastName: "Pandit"},
+		{FirstName: "Ramesh", LastName: "Jayaraman"},
+		{FirstName: "Ganesh", LastName: "Kumar"},
+	}
+	stream, err := client.GreetEveryone(ctx)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	for _, user := range users {
+		req := &proto.GreetRequest{
+			User: &user,
+		}
+
+		log.Println("Sending : ", user)
+		time.Sleep(5 * time.Second)
+		stream.Send(req)
+	}
+	log.Println("Sent all the requests")
+	for {
+		res, err := stream.Recv()
+		if err == io.EOF {
+			log.Println("Received all responses")
+		}
+		if err != nil {
+			log.Fatalln(err)
+		}
+		log.Println("Message : ", res.GetMessage())
 	}
 }

@@ -93,6 +93,8 @@ func (s *server) GreetEveryone(stream proto.AppService_GreetEveryoneServer) erro
 		firstName := req.GetUser().GetFirstName()
 		lastName := req.GetUser().GetLastName()
 		message := fmt.Sprintf("Hi %s %s!", firstName, lastName)
+		time.Sleep(1 * time.Second)
+		log.Println("Sending Greeting : ", message)
 		response := &proto.GreetResponse{
 			Message: message,
 		}
