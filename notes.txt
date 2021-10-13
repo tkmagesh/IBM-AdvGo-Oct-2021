@@ -129,3 +129,12 @@ Profiling
         pprof prof.cpu
     web:
         go tool pprof -http=":8080" profiling-demo.test prof.cpu
+
+
+Profiling Web App
+    import _ "net/http/pprof"
+
+    ab -n 1000 http://localhost:1234/
+
+    To view the profile
+    visit http://localhost:1234/debug/pprof
