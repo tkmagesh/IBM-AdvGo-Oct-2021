@@ -138,3 +138,22 @@ Profiling Web App
 
     To view the profile
     visit http://localhost:1234/debug/pprof
+
+Code Generators
+    1. Template Driven
+    2. AST Driven
+
+
+    Products
+        Filter
+        Index
+        Includes
+        Sort
+
+    Customers
+
+    Add this in the product.go file
+    //go:generate go run ../gen-col.go -N "Customer" -P "Domain"
+
+    From terminal
+    go generate
