@@ -110,3 +110,9 @@ Code Coverage
     go test ./... --cover
     go test ./... -coverprofile=coverage.out
     go tool cover -html=coverage.out
+
+To generate mocks
+    mocker (https://github.com/vektra/mockery)
+        go get github.com/vektra/mockery/v2/.../
+        go mod tidy
+        mockery --all --keeptree

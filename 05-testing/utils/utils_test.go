@@ -1,9 +1,9 @@
 package utils_test
 
-import (
+/* import (
 	"testing"
 	"testing-app/utils"
-)
+) */
 
 /*
 func Test_IsPrime_7(t *testing.T) {
@@ -57,6 +57,7 @@ type TestCase struct {
 	actual   bool
 }
 
+/*
 func Test_IsPrime(t *testing.T) {
 	testCases := []TestCase{
 		TestCase{name: "Test_IsPrime_1", no: 1, expected: false},
@@ -168,3 +169,4 @@ func BenchmarkIsPrime4_73(b *testing.B) {
 		utils.IsPrime4(73)
 	}
 }
+*/
