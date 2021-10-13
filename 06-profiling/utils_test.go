@@ -1,54 +1,8 @@
-package utils_test
+package main
 
 import (
 	"testing"
-	"testing-app/utils"
 )
-
-/*
-func Test_IsPrime_7(t *testing.T) {
-	//Arrange
-	no := 7
-	expected := true
-
-	//Act
-	actual := utils.IsPrime(no)
-
-	//Assert
-	if actual != expected {
-		t.Errorf("Expected %v but got %v", expected, actual)
-	}
-}
-
-func Test_IsPrime_9(t *testing.T) {
-	//Arrange
-	no := 9
-	expected := false
-
-	//Act
-	actual := utils.IsPrime(no)
-
-	//Assert
-	if actual != expected {
-		t.Errorf("Expected %v but got %v", expected, actual)
-	}
-}
-
-func Test_IsPrime_11(t *testing.T) {
-	//Arrange
-	no := 11
-	expected := true
-
-	//Act
-	actual := utils.IsPrime(no)
-
-	//Assert
-	if actual != expected {
-		t.Errorf("Expected %v but got %v", expected, actual)
-	}
-}
-
-*/
 
 type TestCase struct {
 	name     string
@@ -70,7 +24,7 @@ func Test_IsPrime(t *testing.T) {
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			testCase.actual = utils.IsPrime(testCase.no)
+			testCase.actual = IsPrime(testCase.no)
 			if testCase.actual != testCase.expected {
 				t.Errorf("Expected %v but got %v", testCase.expected, testCase.actual)
 			}
@@ -92,7 +46,7 @@ func Test_IsPrime_2(t *testing.T) {
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			testCase.actual = utils.IsPrime2(testCase.no)
+			testCase.actual = IsPrime2(testCase.no)
 			if testCase.actual != testCase.expected {
 				t.Errorf("Expected %v but got %v", testCase.expected, testCase.actual)
 			}
@@ -114,7 +68,7 @@ func Test_IsPrime_3(t *testing.T) {
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			testCase.actual = utils.IsPrime3(testCase.no)
+			testCase.actual = IsPrime3(testCase.no)
 			if testCase.actual != testCase.expected {
 				t.Errorf("Expected %v but got %v", testCase.expected, testCase.actual)
 			}
@@ -136,7 +90,7 @@ func Test_IsPrime_4(t *testing.T) {
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			testCase.actual = utils.IsPrime4(testCase.no)
+			testCase.actual = IsPrime4(testCase.no)
 			if testCase.actual != testCase.expected {
 				t.Errorf("Expected %v but got %v", testCase.expected, testCase.actual)
 			}
@@ -145,26 +99,32 @@ func Test_IsPrime_4(t *testing.T) {
 
 }
 
-func BenchmarkIsPrime_73(b *testing.B) {
+/* func BenchmarkIsPrime_73(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		utils.IsPrime(73)
+		IsPrime(73)
 	}
 }
 
 func BenchmarkIsPrime2_73(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		utils.IsPrime2(73)
+		IsPrime2(73)
 	}
 }
 
 func BenchmarkIsPrime3_73(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		utils.IsPrime3(73)
+		IsPrime3(73)
 	}
 }
 
 func BenchmarkIsPrime4_73(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		utils.IsPrime4(73)
+		IsPrime4(73)
+	}
+} */
+
+func BenchmarkGeneratePrimes_100(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		GeneratePrimes(3, 100)
 	}
 }

@@ -116,3 +116,16 @@ To generate mocks
         go get github.com/vektra/mockery/v2/.../
         go mod tidy
         mockery --all --keeptree
+
+
+Profiling 
+    go test ./... -bench=. -benchmem -cpuprofile prof.cpu
+
+    Installing pprof
+    go get -u github.com/google/pprof
+
+    To view the profile
+    command line:
+        pprof prof.cpu
+    web:
+        go tool pprof -http=":8080" profiling-demo.test prof.cpu
