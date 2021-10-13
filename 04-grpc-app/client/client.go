@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func main() {
@@ -20,10 +22,33 @@ func main() {
 	client := proto.NewAppServiceClient(clientConn)
 	ctx := context.Background()
 
-	doRequestResponse(ctx, client)
+	/* doRequestResponse(ctx, client)
 	doClientStreaming(ctx, client)
 	doServerStreaming(ctx, client)
-	doBidiStreaming(ctx, client)
+	doBidiStreaming(ctx, client) */
+	doRequestResponseWithTimeout(ctx, client)
+}
+
+func doRequestResponseWithTimeout(ctx context.Context, client proto.AppServiceClient) {
+	addRequest := &proto.AddRequest{
+		X: 100,
+		Y: 200,
+	}
+	timeoutCtx, cancelFn := context.WithTimeout(ctx, time.Millisecond*500)
+	defer cancelFn()
+	resp, err := client.Add(timeoutCtx, addRequest)
+	if err != nil {
+		statusErr, ok := status.FromError(err)
+		if ok {
+			if statusErr.Code() == codes.DeadlineExceeded {
+				log.Println("Timeout error")
+			} else {
+				log.Fatalln(err)
+			}
+		}
+		log.Fatalln(err)
+	}
+	log.Println("Result : ", resp.GetSum())
 }
 
 func doRequestResponse(ctx context.Context, client proto.AppServiceClient) {

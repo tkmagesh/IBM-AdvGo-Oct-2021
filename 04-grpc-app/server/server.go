@@ -33,6 +33,9 @@ func (s *server) IncrementCount() {
 func (s *server) Add(ctx context.Context, req *proto.AddRequest) (*proto.AddResponse, error) {
 	//reqCount++
 	//s.reqCount++
+
+	time.Sleep(1 * time.Second) //simulate delay
+
 	s.IncrementCount()
 	x := req.GetX()
 	y := req.GetY()
