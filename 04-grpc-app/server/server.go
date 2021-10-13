@@ -7,16 +7,33 @@ import (
 	"io"
 	"log"
 	"net"
+	"sync"
 	"time"
 
 	"google.golang.org/grpc"
 )
 
+//var reqCount int = 0
+
 type server struct {
+	sync.Mutex
+	reqCount int64
 	proto.UnimplementedAppServiceServer
 }
 
+func (s *server) IncrementCount() {
+	//atomic.AddInt64(&s.reqCount, 1)
+	s.Lock()
+	{
+		s.reqCount++
+	}
+	s.Unlock()
+}
+
 func (s *server) Add(ctx context.Context, req *proto.AddRequest) (*proto.AddResponse, error) {
+	//reqCount++
+	//s.reqCount++
+	s.IncrementCount()
 	x := req.GetX()
 	y := req.GetY()
 	result := x + y
@@ -27,6 +44,8 @@ func (s *server) Add(ctx context.Context, req *proto.AddRequest) (*proto.AddResp
 }
 
 func (s *server) Average(stream proto.AppService_AverageServer) error {
+	//s.reqCount++
+	s.IncrementCount()
 	var sum int32
 	var count int32
 	for {
@@ -53,6 +72,8 @@ func (s *server) Average(stream proto.AppService_AverageServer) error {
 }
 
 func (s *server) GeneratePrime(req *proto.PrimeRequest, stream proto.AppService_GeneratePrimeServer) error {
+	//s.reqCount++
+	s.IncrementCount()
 	start, end := req.GetStart(), req.GetEnd()
 	log.Println("GeneratePrime Request : No = ", start, end)
 	for i := start; i <= end; i++ {
@@ -82,7 +103,10 @@ func isPrime(no int32) bool {
 }
 
 func (s *server) GreetEveryone(stream proto.AppService_GreetEveryoneServer) error {
+
 	for {
+		//s.reqCount++
+
 		req, err := stream.Recv()
 		if err == io.EOF {
 			return nil
@@ -90,6 +114,7 @@ func (s *server) GreetEveryone(stream proto.AppService_GreetEveryoneServer) erro
 		if err != nil {
 			return err
 		}
+		s.IncrementCount()
 		firstName := req.GetUser().GetFirstName()
 		lastName := req.GetUser().GetLastName()
 		message := fmt.Sprintf("Hi %s %s!", firstName, lastName)
@@ -103,6 +128,18 @@ func (s *server) GreetEveryone(stream proto.AppService_GreetEveryoneServer) erro
 }
 
 func main() {
+	s := &server{}
+	go func() {
+		for {
+			s.Lock()
+			{
+				log.Println("Request Count : ", s.reqCount)
+			}
+			s.Unlock()
+			//log.Println("Request Count : ", atomic.LoadInt64(&s.reqCount))
+			time.Sleep(1 * time.Minute)
+		}
+	}()
 
 	//Hosting the service
 	listener, err := net.Listen("tcp", ":50051")
@@ -110,6 +147,6 @@ func main() {
 		log.Fatalln(err)
 	}
 	grcpServer := grpc.NewServer()
-	proto.RegisterAppServiceServer(grcpServer, &server{})
+	proto.RegisterAppServiceServer(grcpServer, s)
 	grcpServer.Serve(listener)
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"grpc-app/proto"
 	"io"
 	"log"
@@ -19,9 +20,9 @@ func main() {
 	client := proto.NewAppServiceClient(clientConn)
 	ctx := context.Background()
 
-	//doRequestResponse(ctx, client)
-	//doClientStreaming(ctx, client)
-	//doServerStreaming(ctx, client)
+	doRequestResponse(ctx, client)
+	doClientStreaming(ctx, client)
+	doServerStreaming(ctx, client)
 	doBidiStreaming(ctx, client)
 }
 
@@ -108,6 +109,7 @@ func doServerStreaming(ctx context.Context, client proto.AppServiceClient) {
 		res, err := stream.Recv()
 		if err == io.EOF {
 			log.Println("Received all responses")
+			break
 		}
 		if err != nil {
 			log.Fatalln(err)
@@ -128,24 +130,32 @@ func doBidiStreaming(ctx context.Context, client proto.AppServiceClient) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	for _, user := range users {
-		req := &proto.GreetRequest{
-			User: &user,
-		}
+	go func() {
+		for _, user := range users {
+			req := &proto.GreetRequest{
+				User: &user,
+			}
 
-		log.Println("Sending : ", user)
-		time.Sleep(5 * time.Second)
-		stream.Send(req)
-	}
-	log.Println("Sent all the requests")
-	for {
-		res, err := stream.Recv()
-		if err == io.EOF {
-			log.Println("Received all responses")
+			time.Sleep(5 * time.Second)
+			log.Println("Sending : ", fmt.Sprintf("%v", user))
+			stream.Send(req)
 		}
-		if err != nil {
-			log.Fatalln(err)
+		log.Println("Sent all the requests")
+	}()
+	done := make(chan bool)
+	go func() {
+		for {
+			res, err := stream.Recv()
+			if err == io.EOF {
+				log.Println("Received all responses")
+				break
+			}
+			if err != nil {
+				log.Fatalln(err)
+			}
+			log.Println("Message : ", res.GetMessage())
 		}
-		log.Println("Message : ", res.GetMessage())
-	}
+		done <- true
+	}()
+	<-done
 }
